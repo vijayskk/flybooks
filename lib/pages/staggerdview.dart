@@ -1,8 +1,7 @@
 // ignore_for_file: unnecessary_new, must_be_immutable, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
-import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
-import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
+import 'package:flybooks/pages/details.dart';
 
 class GridSview extends StatelessWidget {
   List data;
@@ -11,11 +10,16 @@ class GridSview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
       child: GridView.count(
-        mainAxisSpacing: 50,
+        mainAxisSpacing: 5,
         crossAxisCount: 2,
-        children: data.map((e) => ImageBook(image: e["image_url"])).toList(),
+        children: data
+            .map((e) => ImageBook(
+                  image: e["image_url"],
+                  data: e,
+                ))
+            .toList(),
       ),
     );
   }
@@ -23,18 +27,37 @@ class GridSview extends StatelessWidget {
 
 class ImageBook extends StatelessWidget {
   String image;
-  ImageBook({Key? key, required this.image}) : super(key: key);
+  Map data;
+  ImageBook({Key? key, required this.image, required this.data})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 100,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-      clipBehavior: Clip.hardEdge,
-      child: Image.network(
-        image,
-        fit: BoxFit.fitHeight,
+    return Padding(
+      padding: const EdgeInsets.only(top: 20.0),
+      child: Container(
         width: 100,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+        clipBehavior: Clip.hardEdge,
+        child: Hero(
+          tag: image,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) {
+                    return Details(data: data, image: image);
+                  },
+                ),
+              );
+            },
+            child: Image.network(
+              image,
+              fit: BoxFit.fitHeight,
+              width: 100,
+            ),
+          ),
+        ),
       ),
     );
   }

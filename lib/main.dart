@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "Flybooks",
       home: HomeScreen(),
+      theme: ThemeData(primaryColor: Colors.indigo[900]),
     );
   }
 }
